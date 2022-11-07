@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BROWSER=chromium
+DOTOOL=xdotool
 
 if ! command -v apt-get >/dev/null 2>/dev/null; then
 	echo "Currently, this script can only be run on Debian or debian-like-systems like Ubuntu"
@@ -139,7 +140,6 @@ fi
 
 
 
-DOTOOL=xdotool
 
 
 HOME_OFFICE=0
