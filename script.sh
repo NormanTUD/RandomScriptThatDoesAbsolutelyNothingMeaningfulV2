@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BROWSER=chromium
+
 if ! command -v apt-get >/dev/null 2>/dev/null; then
 	echo "Currently, this script can only be run on Debian or debian-like-systems like Ubuntu"
 	exit 1
@@ -11,8 +13,13 @@ if ! command -v nmcli >/dev/null 2>/dev/null; then
 fi
 
 if ! command -v chromium >/dev/null 2>/dev/null; then
-	echo "chromium not installed. Trying to install..."
-	sudo apt-get install chromium
+		echo "chromium not installed. Trying to install..."
+	if uname -a | grep Ubuntu; then
+		sudo apt-get install chromium-browser
+		BROWSER=chromium-browser
+	else
+		sudo apt-get install chromium
+	fi
 fi
 
 if [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
@@ -196,7 +203,7 @@ case $ABTEILUNG in
 		exit 2
 esac
 
-chromium $URL &
+(eval $BROWSER $URL) &
 sleep 2
 # schrottlogin
 eval $DOTOOL type $USERNAME
