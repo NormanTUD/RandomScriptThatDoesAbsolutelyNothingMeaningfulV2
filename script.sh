@@ -7,19 +7,13 @@ if ! command -v apt-get >/dev/null 2>/dev/null; then
 	exit 1
 fi
 
-if ! command -v nmcli >/dev/null 2>/dev/null; then
-	echo "chromium not installed. Trying to install..."
-	sudo apt-get install nmcli
-fi
-
 if ! command -v chromium >/dev/null 2>/dev/null; then
 		echo "chromium not installed. Trying to install..."
 	if uname -a | grep Ubuntu; then
-		sudo apt-get install chromium-browser
 		BROWSER=chromium-browser
-	else
-		sudo apt-get install chromium
 	fi
+
+	sudo apt-get install $BROWSER
 fi
 
 if [[ "$XDG_SESSION_TYPE" == "x11" ]]; then
@@ -161,8 +155,15 @@ if [[ "$force_home_office" -eq "1" ]]; then
 	HOME_OFFICE=1
 elif [[ "$force_auf_arbeit" -eq "1" ]]; then
 	HOME_OFFICE=0
-elif [[ "$(nmcli -t -f active,ssid dev wifi | egrep '(yes|ja):' | sed -e 's/.*://' | grep \"$HOME_NETWORK_NAME\" | wc -l)" -ge "1" ]]; then
-	HOME_OFFICE=1
+else
+	if ! command -v nmcli >/dev/null 2>/dev/null; then
+		echo "chromium not installed. Trying to install..."
+		sudo apt-get install nmcli
+	fi
+
+	if [[ "$(nmcli -t -f active,ssid dev wifi | egrep '(yes|ja):' | sed -e 's/.*://' | grep \"$HOME_NETWORK_NAME\" | wc -l)" -ge "1" ]]; then
+		HOME_OFFICE=1
+	fi
 fi
 
 ARBEIT_RUNTER=1
