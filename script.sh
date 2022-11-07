@@ -39,28 +39,28 @@ function echoerr() {
 }
 
 function red_text {
-        echoerr -e "\e[31m$1\e[0m"
+	echoerr -e "\e[31m$1\e[0m"
 }
 
 set -e
 
 function calltracer () {
-        echo 'Last file/last line:'
-        caller
+	echo 'Last file/last line:'
+	caller
 }
 trap 'calltracer' ERR
 
 function help () {
-        echo "Possible options:"
-        echo "  --username=USERNAME				Shibboleth username"
+	echo "Possible options:"
+	echo "  --username=USERNAME				Shibboleth username"
 	echo "  --password=PASSWORD				Shibboleth password (when not entered, it will ask you via zenity)"
 	echo "  --url=STARTURL					Starturl"
 	echo "  --home_network_name=HOME_NETWORK_NAME		Name of your network at home"
-        echo "  --force_home_office				Force Home Office"
-        echo "  --force_auf_arbeit				Force auf Arbeit"
-        echo "  --help					this help"
-        echo "  --debug					Enables debug mode (set -x)"
-        exit $1
+	echo "  --force_home_office				Force Home Office"
+	echo "  --force_auf_arbeit				Force auf Arbeit"
+	echo "  --help					this help"
+	echo "  --debug					Enables debug mode (set -x)"
+	exit $1
 }
 
 export USERNAME
@@ -72,46 +72,46 @@ URL=""
 HOME_NETWORK_NAME=""
 
 for i in $@; do
-        case $i in
-                --home_network_name=*)
-                        HOME_NETWORK_NAME="${i#*=}"
-                        shift
-                        ;;
-                --abteilung=*)
-                        ABTEILUNG="${i#*=}"
-                        shift
-                        ;;
-                --username=*)
-                        USERNAME="${i#*=}"
-                        shift
-                        ;;
-                --password=*)
-                        PASSWORD="${i#*=}"
-                        shift
-                        ;;
-                --force_home_office)
-                        force_home_office=1
-                        shift
-                        ;;
-                --force_auf_arbeit)
-                        force_auf_arbeit=1
-                        shift
-                        ;;
+	case $i in
+		--home_network_name=*)
+			HOME_NETWORK_NAME="${i#*=}"
+			shift
+			;;
+		--abteilung=*)
+			ABTEILUNG="${i#*=}"
+			shift
+			;;
+		--username=*)
+			USERNAME="${i#*=}"
+			shift
+			;;
+		--password=*)
+			PASSWORD="${i#*=}"
+			shift
+			;;
+		--force_home_office)
+			force_home_office=1
+			shift
+			;;
+		--force_auf_arbeit)
+			force_auf_arbeit=1
+			shift
+			;;
 		--url=*)
 			URL="${i#*=}"
 			shift
 			;;
-                -h|--help)
-                        help 0
-                        ;;
-                --debug)
-                        set -x
-                        ;;
-                *)
-                        red_text "Unknown parameter $i" >&2
-                        help 1
-                        ;;
-        esac
+		-h|--help)
+			help 0
+			;;
+		--debug)
+			set -x
+			;;
+		*)
+			red_text "Unknown parameter $i" >&2
+			help 1
+			;;
+	esac
 done
 
 if [[ ! -z $force_home_office ]]; then
@@ -137,10 +137,6 @@ if [[ -z "$ABTEILUNG" ]]; then
 	red_text "Parameter --abteilung cannot be empty"
 	help 1
 fi
-
-
-
-
 
 HOME_OFFICE=0
 
