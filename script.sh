@@ -53,6 +53,7 @@ function help () {
         echo "  --username=USERNAME				Shibboleth username"
 	echo "  --password=PASSWORD				Shibboleth password (when not entered, it will ask you via zenity)"
 	echo "  --url=STARTURL					Starturl"
+	echo "  --home_network_name=HOME_NETWORK_NAME		Name of your network at home"
         echo "  --force_home_office				Force Home Office"
         echo "  --force_auf_arbeit				Force auf Arbeit"
         echo "  --help					this help"
@@ -66,9 +67,14 @@ ABTEILUNG=""
 export force_home_office
 export force_auf_arbeit
 URL=""
+HOME_NETWORK_NAME=""
 
 for i in $@; do
         case $i in
+                --home_network_name=*)
+                        HOME_NETWORK_NAME="${i#*=}"
+                        shift
+                        ;;
                 --abteilung=*)
                         ABTEILUNG="${i#*=}"
                         shift
@@ -106,6 +112,10 @@ for i in $@; do
         esac
 done
 
+if [[ -z "$HOME_NETWORK_NAME" ]]; then
+	red_text "Parameter --home_network_name cannot be empty"
+	help 1
+fi
 
 if [[ -z "$URL" ]]; then
 	red_text "Parameter --url cannot be empty"
@@ -131,7 +141,6 @@ if [[ -z "$PASSWORD" ]]; then
 	PASSWORD=$(zenity --password)
 fi
 
-HOME_NETWORK_NAME="hermannschmitz"
 
 DOTOOL=xdotool
 
