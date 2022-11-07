@@ -8,7 +8,7 @@ if ! command -v apt-get >/dev/null 2>/dev/null; then
 fi
 
 if ! command -v chromium >/dev/null 2>/dev/null; then
-		echo "chromium not installed. Trying to install..."
+	echo "chromium not installed. Trying to install..."
 	if uname -a | grep Ubuntu; then
 		BROWSER=chromium-browser
 	fi
