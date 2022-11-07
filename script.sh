@@ -119,9 +119,13 @@ for i in $@; do
         esac
 done
 
-if [[ -z "$HOME_NETWORK_NAME" ]]; then
-	red_text "Parameter --home_network_name cannot be empty"
-	help 1
+if [[ ! -z $force_home_office ]]; then
+	if [[ ! -z $force_auf_arbeit ]]; then
+		if [[ -z "$HOME_NETWORK_NAME" ]]; then
+			red_text "Parameter --home_network_name cannot be empty"
+			help 1
+		fi
+	fi
 fi
 
 if [[ -z "$URL" ]]; then
@@ -139,14 +143,6 @@ if [[ -z "$ABTEILUNG" ]]; then
 	help 1
 fi
 
-if [[ -z "$PASSWORD" ]]; then
-	if ! command -v zenity >/dev/null 2>/dev/null; then
-		echo "chromium not installed. Trying to install..."
-		sudo apt-get install zenity
-	fi
-
-	PASSWORD=$(zenity --password)
-fi
 
 
 DOTOOL=xdotool
@@ -203,6 +199,15 @@ case $ABTEILUNG in
 		exit 2
 esac
 
+if [[ -z "$PASSWORD" ]]; then
+	if ! command -v zenity >/dev/null 2>/dev/null; then
+		echo "chromium not installed. Trying to install..."
+		sudo apt-get install zenity
+	fi
+
+	PASSWORD=$(zenity --password)
+fi
+
 (eval $BROWSER $URL) &
 sleep 2
 # schrottlogin
@@ -210,6 +215,7 @@ eval $DOTOOL type $USERNAME
 eval $DOTOOL key Tab
 set +x
 eval $DOTOOL type $PASSWORD
+unset PASSWORD
 set -x
 eval $DOTOOL key Return
 sleep 2
