@@ -34,6 +34,15 @@ else
 	DOTOOL="sudo ydotool"
 fi
 
+ALREADYDONEFILE=/tmp/$(date +"%d_%m_%Y")
+
+if [[ -f "$ALREADYDONEFILE" ]]; then
+	echo "$ALREADYDONEFILE exists"
+	exit
+fi
+
+touch $ALREADYDONEFILE
+
 function echoerr() {
 	echo "$@" 1>&2
 }
